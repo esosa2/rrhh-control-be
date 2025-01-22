@@ -1,0 +1,43 @@
+{
+  "name": "rrhh-control-de-funcionarios-pruebatecnica",
+  "version": "1.0.0",
+  "description": "Backend Node + Express + React",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/index.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/esosa2/RRHH-Control-de-funcionarios-Pruebatecnica.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "typescript",
+    "react"
+  ],
+  "author": "@esosa2",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/esosa2/RRHH-Control-de-funcionarios-Pruebatecnica/issues"
+  },
+  "homepage": "https://github.com/esosa2/RRHH-Control-de-funcionarios-Pruebatecnica#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.7",
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9",
+    "typescript": "^5.7.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-node-externals": "^3.0.0",
+    "webpack-shell-plugin": "^0.5.0"
+  }
+}
