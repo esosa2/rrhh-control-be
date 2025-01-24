@@ -4,7 +4,7 @@
  */
 
 import express, { Request, Response } from "express";
-import registerAdminRouter from "./RegisterAdminRouter";
+import registerAdminRouter from "./register.admin.router";
 import { LogInfo } from "../utils/logger";
 
 //Server instance

@@ -1,4 +1,4 @@
-import { ApiResponse } from "../types/ApiResponse";
+import { ApiResponse } from "../types/api.response";
 
 export interface IRegisterAdminController {
     getAdmin(adminId:number): Promise<ApiResponse<any>>

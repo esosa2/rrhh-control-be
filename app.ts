@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import server from "./src/server/server-config";
+import server from "./src/server/server.config";
 import { LogError, LogSuccess } from "./src/utils/logger";
 
 
@@ -10,7 +10,7 @@ const port: string | number = process.env.PORT || 8000;
 
 // * Execute server
 server.listen(port, () => {
-    LogSuccess(`[SERVER ON]: Running in http://localhost:${port}/api    `);
+    LogSuccess(`[SERVER ON]: Running in http://localhost:${port}/api`);
 });
 
 // Control server error

@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import pg from 'pg';
 import dotenv from 'dotenv';
 import { LogInfo, LogError } from '../utils/logger';
 
@@ -15,18 +15,33 @@ const dbConfig = {
 };
 
 // Crear el pool de conexiones
-export const pool = new Pool(dbConfig);
+export const pool = new pg.Pool(dbConfig);
 
-// Verificar la conexión al iniciar
-(async () => {
-    try {
-        LogInfo('Conectando a la base de datos...');
-        const client = await pool.connect();
-        LogInfo('Conexión exitosa a la base de datos.');
-        client.release(); // Liberar el cliente al pool
-    } catch (error) {
-        LogError(`Error al conectar a la base de datos: ${error}`);
-    }
-})();
+/**
+ * 
+ * 
+ * CREATE TABLE IF NOT EXISTS funcionarios (
+    id SERIAL PRIMARY KEY,
+    nombres VARCHAR(50) NOT NULL,
+    apellidos VARCHAR(50) NOT NULL,
+    cedula VARCHAR(20) UNIQUE NOT NULL,
+    fecha_nacimiento DATE NOT NULL
+);
 
-// Exportar el pool para su uso en toda la aplicación
+CREATE TABLE IF NOT EXISTS registro_entrada_salida (
+    id SERIAL PRIMARY KEY,
+    funcionario_id INT REFERENCES funcionarios(id),
+    fecha DATE NOT NULL,
+    hora_entrada TIME NOT NULL,
+    hora_salida TIME NOT NULL
+);
+
+
+PORT=8001
+DB_HOST=localhost
+DB_PORT=5433
+DB_USER=postgres
+DB_PASSWORD=4974320
+DB_NAME=rrhh_control
+
+ */
