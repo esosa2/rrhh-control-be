@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 import server from "./src/server/server-config";
 import { LogError, LogSuccess } from "./src/utils/logger";
 import { error } from "console";
+import './src/config/database'; // Importar y ejecutar el script
+
 
 // Configuration to env file
 dotenv.config();
