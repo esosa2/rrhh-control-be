@@ -36,12 +36,4 @@ CREATE TABLE IF NOT EXISTS registro_entrada_salida (
     hora_salida TIME NOT NULL
 );
 
-
-PORT=8001
-DB_HOST=localhost
-DB_PORT=5433
-DB_USER=postgres
-DB_PASSWORD=4974320
-DB_NAME=rrhh_control
-
  */
