@@ -1,6 +1,6 @@
 import { ApiResponse } from "./types/api.response";
 import { IRegisterHoursController } from "./interfaces/register.hours"
-import { LogInfo, LogError, LogSuccess, Logwarning } from "../utils/logger";
+import { LogInfo, LogError, LogSuccess } from "../utils/logger";
 import { pool } from "../config/database";
 
 export class RegisterHoursController implements IRegisterHoursController {
@@ -34,5 +34,4 @@ export class RegisterHoursController implements IRegisterHoursController {
             };
         }
     }
-
 }

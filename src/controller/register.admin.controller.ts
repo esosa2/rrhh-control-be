@@ -1,6 +1,6 @@
 import { ApiResponse } from "./types/api.response";
 import { IRegisterAdminController } from "./interfaces/register.admin";
-import { LogInfo, LogError, LogSuccess, Logwarning } from "../utils/logger";
+import { LogInfo, LogError, LogSuccess } from "../utils/logger";
 import { pool } from "../config/database";
 
 
