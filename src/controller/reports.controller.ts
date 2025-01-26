@@ -5,6 +5,7 @@ import { pool } from "../config/database";
 
 export class ReportsController implements IReportsController {
 
+    // Method to generate a report of hours worked by an admin within a date range
     async reportHours(adminId?: number, dateBegin?: Date | undefined, dateEnd?: Date | undefined): Promise<ApiResponse<any>> {
         LogInfo('[/api/reports] Get Request');
         try {

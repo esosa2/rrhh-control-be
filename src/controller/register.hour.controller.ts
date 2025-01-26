@@ -5,6 +5,7 @@ import { pool } from "../config/database";
 
 export class RegisterHoursController implements IRegisterHoursController {
 
+    // Method to register an entry and exit time for a specific admin
     async registerHour(adminId: number, date: string, entryTime: string, exitTime: string): Promise<ApiResponse<any>> {
         LogInfo('[/api/registerHour] Post Request');
         try {

@@ -1,39 +1,26 @@
 import pg from 'pg';
 import dotenv from 'dotenv';
-import { LogInfo, LogError } from '../utils/logger';
 
-// Cargar las variables de entorno
+// Load environment variables from the .env file
 dotenv.config();
 
-// Configuración del pool de conexión
+// Database connection pool configuration
 const dbConfig = {
+    // Host address of the database (defaults to 'localhost' if not set)
     host: process.env.DB_HOST || 'localhost',
+
+    // Port number of the database server (defaults to 5432 for PostgreSQL)
     port: Number(process.env.DB_PORT) || 5432,
-    user: process.env.DB_USER || 'default_user',
-    password: process.env.DB_PASSWORD || 'default_password',
-    database: process.env.DB_NAME || 'default_database',
+
+    // Database username (defaults to 'postgres')
+    user: process.env.DB_USER || 'postgres',
+
+    // Database password for the user (defaults to '12345678')
+    password: process.env.DB_PASSWORD || '12345678',
+
+    // Name of the database to connect to (defaults to 'rrhh_control')
+    database: process.env.DB_NAME || 'rrhh_control',
 };
 
-// Crear el pool de conexiones
+// Create the connection pool with the provided configuration
 export const pool = new pg.Pool(dbConfig);
-
-/**
- * 
- * 
- * CREATE TABLE IF NOT EXISTS funcionarios (
-    id SERIAL PRIMARY KEY,
-    nombres VARCHAR(50) NOT NULL,
-    apellidos VARCHAR(50) NOT NULL,
-    cedula VARCHAR(20) UNIQUE NOT NULL,
-    fecha_nacimiento DATE NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS registro_entrada_salida (
-    id SERIAL PRIMARY KEY,
-    funcionario_id INT REFERENCES funcionarios(id),
-    fecha DATE NOT NULL,
-    hora_entrada TIME NOT NULL,
-    hora_salida TIME NOT NULL
-);
-
- */

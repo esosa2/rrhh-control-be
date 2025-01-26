@@ -1,21 +1,26 @@
+// Import necessary dependencies
 import express, { Request, Response } from "express";
 import { RegisterHoursController } from "../controller/register.hour.controller"
 
-// Router from express
+// Create an Express router instance to handle routes
 let registerHours = express.Router();
 
+// Route to handle requests to /api/register_hours/
 registerHours.route('/')
-    // POST
+    // POST route: Register working hours for an administrator
     .post(async (req: Request, res: Response) => {
-        // Obtain body
+        // Get the request body data containing the hours details
         const { adminId, date, entryTime, exitTime } = req.body;
-        // Define controller instance to execute method
+        
+        // Create an instance of the controller to execute the appropriate method
         const controller: RegisterHoursController = new RegisterHoursController();
-        // Obtain response
+        
+        // Call the method to register the working hours
         const response = await controller.registerHour(adminId, date, entryTime, exitTime);
-        // Send to the client the response
+        
+        // Send the response to the client
         res.status(response.status).send(response);
     })
 
-// Export RegisterHours router
+// Export the router to be used in other files
 export default registerHours;

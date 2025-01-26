@@ -1,64 +1,78 @@
+// Import necessary dependencies
 import express, { Request, Response } from "express";
 import { RegisterAdminController } from "../controller/register.admin.controller";
 import { LogInfo } from "../utils/logger";
 
-// Router from express
+// Create an Express router instance to handle routes
 let registerAdminRouter = express.Router();
 
-// http://localhost:8001/api/register_admin/
+// Route to handle requests to /api/register_admin/
 registerAdminRouter.route('/')
-    // GET
+    // GET route: Retrieve administrator information
     .get(async (req: Request, res: Response) => {
-        // Obtain query param
+        // Get the 'adminId' query parameter
         const adminId = req?.query?.adminId ? parseInt(req.query.adminId as string, 10) : undefined;
-        LogInfo(`Obtain query param: ${adminId}`);
-        // Define controller instance to execute method
+        LogInfo(`Obtained query parameter: ${adminId}`);
+        
+        // Create an instance of the controller to execute the appropriate method
         const controller: RegisterAdminController = new RegisterAdminController();
-        // Obtain response
+        
+        // Call the method to retrieve administrator information
         const response = await controller.getAdmin(adminId);
-        LogInfo(`Obtain this response: ${response.status} -> ${response.data ? JSON.stringify(response.data) : 'No data available'}`);
-        // Send to the client the response
+        LogInfo(`Response obtained: ${response.status} -> ${response.data ? JSON.stringify(response.data) : 'No data available'}`);
+        
+        // Send the response to the client
         res.status(response.status).send(response);
     })
-    // POST
+    // POST route: Register a new administrator
     .post(async (req: Request, res: Response) => {
-        // Obtain body
-        LogInfo(`Obtain this request: ${req.body}`);
+        // Get the request body data
+        LogInfo(`Request received: ${req.body}`);
         const { firstName, lastName, identityNumber, dateBirthday } = req.body;
-        // Define controller instance to execute method
+        
+        // Create an instance of the controller to execute the appropriate method
         const controller: RegisterAdminController = new RegisterAdminController();
-        // Obtain response
+        
+        // Call the method to register the administrator
         const response = await controller.registerAdmin(firstName, lastName, identityNumber, dateBirthday);
-        LogInfo(`Obtain this response: ${response.status} -> ${response.data ? JSON.stringify(response.data) : 'No data available'}`);
-        // Send to the client the response
+        LogInfo(`Response obtained: ${response.status} -> ${response.data ? JSON.stringify(response.data) : 'No data available'}`);
+        
+        // Send the response to the client
         res.status(response.status).send(response);
     })
-    // PUT
+    // PUT route: Update administrator information
     .put(async (req: Request, res: Response) => {
-        // Obtain body
-        LogInfo(`Obtain this request: ${req.body}`);
+        // Get the request body data
+        LogInfo(`Request received: ${req.body}`);
         const { adminId, firstName, lastName, identityNumber, dateBirthday } = req.body;
-        // Define controller instance to execute method
+        
+        // Create an instance of the controller to execute the appropriate method
         const controller: RegisterAdminController = new RegisterAdminController();
-        // Obtain response
+        
+        // Call the method to update the administrator information
         const response = await controller.updateAdmin(adminId, firstName, lastName, identityNumber, dateBirthday);
-        LogInfo(`Obtain this response: ${response.status} -> ${response.data ? JSON.stringify(response.data) : 'No data available'}`);
-        // Send to the client the response
+        LogInfo(`Response obtained: ${response.status} -> ${response.data ? JSON.stringify(response.data) : 'No data available'}`);
+        
+        // Send the response to the client
         res.status(response.status).send(response);
     })
     
-// DELETE
+// DELETE route: Delete an administrator by their ID
 registerAdminRouter.delete('/:adminId', async (req: Request, res: Response) => {
-    // Obtain body
-    const adminId = parseInt(req.params.adminId, 10);  // Usamos params en lugar de query
-    LogInfo(`Obtain this request: ${adminId}`);
-    // Define controller instance to execute method
+    // Get the 'adminId' parameter from the URL
+    const adminId = parseInt(req.params.adminId, 10);  // Using params instead of query
+    LogInfo(`Request received to delete administrator with ID: ${adminId}`);
+    
+    // Create an instance of the controller to execute the appropriate method
     const controller: RegisterAdminController = new RegisterAdminController();
-    // Obtain response
+    
+    // Call the method to delete the administrator
     const response = await controller.deleteAdmin(adminId);
-    LogInfo(`Obtain this response: ${response.status} -> ${response.data ? JSON.stringify(response.data) : 'No data available'}`);
-    // Send to the client the response
+    LogInfo(`Response obtained: ${response.status} -> ${response.data ? JSON.stringify(response.data) : 'No data available'}`);
+    
+    // Send the response to the client
     res.status(response.status).send(response);
 })
-// Export RegisterAdmin router
+
+// Export the router to be used in other files
 export default registerAdminRouter;

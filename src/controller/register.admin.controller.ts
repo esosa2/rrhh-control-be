@@ -6,6 +6,7 @@ import { pool } from "../config/database";
 
 export class RegisterAdminController implements IRegisterAdminController {
 
+    // Method to get an admin by their ID (optional parameter)
     async getAdmin(adminId?: number): Promise<ApiResponse<any>> {
         LogInfo('[/api/register_admin] Get Request');
         try {
@@ -45,6 +46,7 @@ export class RegisterAdminController implements IRegisterAdminController {
         }
     }
 
+    // Method to register a new admin with the provided details
     async registerAdmin(firstName: string, lastName: string, identityNumber: string, dateBirthday: string): Promise<ApiResponse<any>> {
         LogInfo('[/api/register_admin] Post Request');
         try {
@@ -75,6 +77,7 @@ export class RegisterAdminController implements IRegisterAdminController {
         }
     }
 
+    // Method to update an existing admin's details by adminId
     async updateAdmin(adminId: number, firstName: string, lastName: string, identityNumber: string, dateBirthday: string): Promise<ApiResponse<any>> {
         LogInfo('[/api/register_admin] Put Request');
         try {
@@ -106,6 +109,7 @@ export class RegisterAdminController implements IRegisterAdminController {
         }
     }
 
+    // Method to delete an admin by their adminId
     async deleteAdmin(adminId: number): Promise<ApiResponse<any>> {
         LogInfo('[/api/register_admin] Delete Request');
         const client = await pool.connect();
