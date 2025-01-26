@@ -9,7 +9,13 @@ reportsRouter.route("/")
     // GET
     .get(async (req: Request, res: Response) => {
         // Obtain query param
-        const adminId: number = parseInt(req?.query?.adminId as string, 10);
+        const adminIdStr = req?.query?.adminId as string;
+        let adminId: number = adminIdStr ? parseInt(adminIdStr, 10) : 0;
+
+        if (isNaN(adminId)) {
+            adminId = 0;
+        }
+        
         const dateBegin: Date | undefined = req?.query?.dateBegin
             ? new Date(req.query.dateBegin as string)
             : undefined;

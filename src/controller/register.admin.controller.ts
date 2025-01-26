@@ -6,11 +6,17 @@ import { pool } from "../config/database";
 
 export class RegisterAdminController implements IRegisterAdminController {
 
-    async getAdmin(adminId: number): Promise<ApiResponse<any>> {
+    async getAdmin(adminId?: number): Promise<ApiResponse<any>> {
         LogInfo('[/api/register_admin] Get Request');
         try {
-            const query = 'SELECT * FROM funcionarios WHERE id = $1';
-            const result = await pool.query(query, [adminId]);
+            let query = 'SELECT * FROM funcionarios';
+            const args: any[] = []
+
+            if (adminId !== undefined) {
+                query += ' WHERE id = $1';
+                args.push(adminId);
+            }
+            const result = await pool.query(query, args);
 
             // Verificar si se encontró el admin
             if (result.rowCount === 0) {
@@ -26,7 +32,7 @@ export class RegisterAdminController implements IRegisterAdminController {
                 status: 200,
                 success: true,
                 message: "Admin retrieved successfully",
-                data: result.rows[0],
+                data: result.rows,
             };
         } catch (error: any) {
             LogError(`Error retrieving admin: ${error}`);
@@ -44,7 +50,7 @@ export class RegisterAdminController implements IRegisterAdminController {
         try {
             const query = `
                 INSERT INTO funcionarios (nombres, apellidos, cedula, fecha_nacimiento)
-                VALUES ($1, $2, $3, $4)
+                VALUES ($1, $2, $3, $4::date)
                 RETURNING id, nombres, apellidos, cedula, fecha_nacimiento;
             `;
             const values = [firstName, lastName, identityNumber, dateBirthday];
@@ -77,57 +83,69 @@ export class RegisterAdminController implements IRegisterAdminController {
             const result = await pool.query(query, values);
 
             if (result.rowCount === 0) {
-                return { 
-                    status: 404, 
-                    success: false, 
-                    message: 'Admin not found' 
+                return {
+                    status: 404,
+                    success: false,
+                    message: 'Admin not found'
                 };
             }
-            return { 
-                status: 200, 
-                success: true, 
-                message: 'Admin updated successfully', 
-                data: result.rows[0] 
+            return {
+                status: 200,
+                success: true,
+                message: 'Admin updated successfully',
+                data: result.rows[0]
             };
         } catch (error: any) {
             LogError(`Error updating admin: ${error}`);
-            return { 
-                status: 500, 
-                success: false, 
-                message: 'Internal server error', 
-                error: error 
+            return {
+                status: 500,
+                success: false,
+                message: 'Internal server error',
+                error: error
             };
         }
     }
 
-    async deleteAdmin(adminId: number): Promise<ApiResponse<any>> { 
+    async deleteAdmin(adminId: number): Promise<ApiResponse<any>> {
         LogInfo('[/api/register_admin] Delete Request');
+        const client = await pool.connect();
         try {
-            const query = 'DELETE FROM funcionarios WHERE id = $1 RETURNING *';
-            const result = await pool.query(query, [adminId]);
+            await client.query('BEGIN');
+
+            const deleteEntriesQuery = 'DELETE FROM registro_entrada_salida WHERE funcionario_id = $1';
+            await client.query(deleteEntriesQuery, [adminId]);
+
+            const deleteAdminQuery = 'DELETE FROM funcionarios WHERE id = $1 RETURNING *';
+            const result = await client.query(deleteAdminQuery, [adminId]);
 
             if (result.rowCount === 0) {
-                return { 
-                    status: 404, 
-                    success: false, 
-                    message: 'Admin not found' 
+                await client.query('ROLLBACK');
+                return {
+                    status: 404,
+                    success: false,
+                    message: 'Admin not found'
                 };
             }
 
-            return { 
-                status: 200, 
-                success: true, 
-                message: 'Admin deleted successfully', 
-                data: result.rows[0] 
+            await client.query('COMMIT');
+
+            return {
+                status: 200,
+                success: true,
+                message: 'Admin and related records deleted successfully',
+                data: result.rows[0]
             };
         } catch (error: any) {
+            await client.query('ROLLBACK');
             LogError(`Error deleting admin: ${error}`);
-            return { 
-                status: 500, 
-                success: false, 
-                message: 'Internal server error', 
-                error: error.message 
+            return {
+                status: 500,
+                success: false,
+                message: 'Internal server error',
+                error: error.message
             };
+        } finally {
+            client.release();
         }
     }
 }

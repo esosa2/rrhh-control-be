@@ -11,6 +11,18 @@ import { LogInfo } from "../utils/logger";
 
 //Server instance
 let server = express();
+server.use(express.json());
+
+// CORS headers
+server.use((req: Request, res: Response, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Max-Age", "1800");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+
+    next();
+});
 
 // Router instance
 let rootRouter = express.Router();

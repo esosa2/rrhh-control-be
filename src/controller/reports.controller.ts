@@ -5,26 +5,31 @@ import { pool } from "../config/database";
 
 export class ReportsController implements IReportsController {
 
-    async reportHours(adminId: number, dateBegin: Date | undefined, dateEnd: Date | undefined): Promise<ApiResponse<any>> {
+    async reportHours(adminId?: number, dateBegin?: Date | undefined, dateEnd?: Date | undefined): Promise<ApiResponse<any>> {
         LogInfo('[/api/reports] Get Request');
         try {
-            let query = "SELECT f.id, f.nombres, f.apellidos, res.hora_entrada, res.hora_salida, (res.hora_salida - res.hora_entrada) AS horas_trabajadas " +
+            let query = "SELECT f.nombres, f.apellidos, res.fecha, res.hora_entrada, res.hora_salida, (res.hora_salida - res.hora_entrada) AS horas_trabajadas " +
                 "FROM registro_entrada_salida res JOIN funcionarios f ON res.funcionario_id = f.id "
             const whereClauses: string[] = [];
             const args: any[] = [];
+            let argIndex = 1;
 
-            // Add filters based on non-null parameters
-            if (adminId !== null && adminId !== undefined) {
-                whereClauses.push("f.id = $1");
+            if (adminId) {
+                whereClauses.push(`f.id = $${argIndex}`);
                 args.push(adminId);
+                argIndex++;
             }
-            if (dateBegin !== null && dateBegin !== undefined) {
-                whereClauses.push("res.fecha >= $2");
-                args.push(dateBegin);
+
+            if (dateBegin) {
+                whereClauses.push(`res.fecha >= $${argIndex}`);
+                args.push(new Date(dateBegin).toISOString().split('T')[0]);
+                argIndex++;
             }
-            if (dateEnd !== null && dateEnd !== undefined) {
-                whereClauses.push("res.fecha <= $3");
-                args.push(dateEnd);
+
+            if (dateEnd) {
+                whereClauses.push(`res.fecha <= $${argIndex}`);
+                args.push(new Date(dateEnd).toISOString().split('T')[0]);
+                argIndex++;
             }
 
             // Append WHERE clause if there are any filters
